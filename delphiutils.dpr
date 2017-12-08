@@ -5,6 +5,7 @@ uses
   uStrUtils in 'src\utils\uStrUtils.pas',
   uCharSplit in 'src\utils\uCharSplit.pas',
   uCharUtils in 'src\utils\uCharUtils.pas',
+  uSqlUtils in 'src\utils\uSqlUtils.pas',
   uCommEvents in 'src\utils\uCommEvents.pas',
   uMyTextFile in 'src\utils\uMyTextFile.pas',
   uNetHttpClt in 'src\utils\uNetHttpClt.pas',
