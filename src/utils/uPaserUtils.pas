@@ -2,8 +2,7 @@ unit uPaserUtils;
 
 interface
 
-uses classes, Windows, SysUtils, IdHttp, HtmlParser_XE3UP,
-  Generics.Collections, Generics.Defaults;
+uses classes, SysUtils, HtmlParser_XE3UP;
 
 type
 
@@ -21,7 +20,7 @@ type
   TPaserUtils = class
   public
     class function correctPath(const S: string): string; static;
-    class function datetimeToLong(const dt: TDateTime): long; static;
+    class function datetimeToLong(const dt: TDateTime): int64; static;
     class function eleToStr(e: IHtmlElement): string; static;
     class function eleToStrRaw(e: IHtmlElement; const ori: boolean): string; static;
     class function ExtractFileOnly(const fName: string): string; static;
@@ -45,7 +44,7 @@ type
     class function getCssRevIdx(const node: IHtmlElement; const cssSel: string;
       const n: integer): string; static;
   public
-    class function nowToLong: long; static;
+    class function nowToLong: int64; static;
   public
     class procedure SimpleCSSSelAttr(const node: IHtmlElement; const cssSel: string;
       strs: TStrings; const attr: string; const doStrsEv: TElementStrsEvent;
@@ -160,14 +159,14 @@ begin
   Result := getCssIdx(node, cssSel, 0);
 end;
 
-class function TPaserUtils.datetimeToLong(const dt: TDateTime): long;
+class function TPaserUtils.datetimeToLong(const dt: TDateTime): int64;
 const
   cUnixStartDate: TDateTime = 25569.0; // 1970/01/01
 begin
   Result := Round((dt - cUnixStartDate) * 86400);
 end;
 
-class function TPaserUtils.nowToLong(): long;
+class function TPaserUtils.nowToLong(): int64;
 begin
   Result := datetimeToLong(now());
 end;
