@@ -9,10 +9,13 @@ type
   private
   protected
   public
+    class function delSplitIdxOfKey(const S, compareKey: string;
+      const c: Char): integer; static;
     class function getSplitOfName(const S: string; const c: Char;
       const key: string): string;
 
-    class procedure SplitStr(const S, ch: String; strs: TStrings);
+    class procedure SplitStr(const S, ch: String; strs: TStrings;
+      const inclu: boolean=false);
     class function getSplitFirst(const S: string; const c: string): string; overload;
     class function getSplitLast(const S: string; const c: string): string; overload;
     class function getSplitIdx(const S, c: String; const idx: integer): string; overload;
@@ -30,8 +33,6 @@ type
     class function getSplitLast(const S: string; const c: Char): string; overload;
     class function GetStrOfSplit(const strs: TStrings; const ch:String): string; overload;
     class function GetStrOfSplit(const strs: TStrings; const c:char): string; overload;
-    class function replaceSplitStr(const S, ch, chMerge: String): string; overload;
-    class function replaceSplitChar(const S: string; const ch, chMerge: char): string; overload;
     class function getSplitCount(const S: String; const ch: char): integer;
 
     class procedure SplitRemoveIdx(const S: string; const c: char; ss: TStrings;
@@ -42,28 +43,168 @@ type
     class function SplitRemoveIdx(const S: string; const c: char; const nIdx: integer): string; overload;
     class function SplitRemoveFirst(const S: string; const c: char): string; overload;
     class function SplitRemoveLast(const S: string; const c: char): string; overload;
+
+    class function getSplitIdxOfKey(const S: string; const compareKey: string;
+      const c: Char): integer;
+    class function getSpltValueOfKey(const S: string; const compareKey: string;
+      const c: Char): string;
+    class function existsSplitKey(const S: string; const compareKey: string;
+      const c: Char): boolean;
+    //
+    class function replaceSplitStr(const S, ch, chMerge: String): string; overload;
+    class function replaceSplitChar(const S: string; const ch, chMerge: char): string; overload;
   end;
 
 implementation
 
-class procedure TCharSplit.SplitStr(const S, ch: String; strs: TStrings);
+uses SysUtils, Generics.Collections;
+
+class function TCharSplit.existsSplitKey(const S: string; const compareKey: string;
+  const c: Char): boolean;
+begin
+  if (getSplitIdxOfKey(S, compareKey, c))>=0 then begin
+    Result := true;
+  end else begin
+    Result := false;
+  end;
+end;
+
+class function TCharSplit.getSplitIdxOfKey(const S: string; const compareKey: string;
+  const c: Char): integer;
+var strs: TStrings;
+  I: integer;
+begin
+  Result := -1;
+  strs := TStringList.Create;
+  try
+    strs.Delimiter := c;
+    strs.DelimitedText := S;
+    strs.StrictDelimiter := true;
+    if strs.Count>0 then begin
+      for I := 0 to strs.Count - 1 do begin
+        if SameText(strs[I], compareKey) then begin
+          Result := I;
+          break;
+        end;
+      end;
+    end;
+  finally
+    if Assigned(strs) then strs.Free;
+  end;
+end;
+
+class function TCharSplit.delSplitIdxOfKey(const S: string; const compareKey: string;
+    const c: Char): integer;
+  procedure doit();
+  var strs: TStrings;
+    I: integer;
+  begin
+    Result := -1;
+    strs := TStringList.Create;
+    try
+      strs.Delimiter := c;
+      strs.DelimitedText := S;
+      strs.StrictDelimiter := true;
+      if strs.Count>0 then begin
+        for I := 0 to strs.Count - 1 do begin
+          if SameText(strs[I], compareKey) then begin
+            Result := I;
+            break;
+          end;
+        end;
+      end;
+    finally
+      if Assigned(strs) then strs.Free;
+    end;
+  end;
+var //mapKey: TDictionary<String, boolean>;
+  arRest: TArray<string>;
+  i: integer;
+begin
+  //mapKey := TDictionary<String, boolean>.create();
+  try
+    arRest := compareKey.Split(c);
+    if (arRest<>nil) then begin
+      for I := 0 to High(arRest) do begin
+      end;
+    end;
+  finally
+    //mapKey.Free;
+  end;
+end;
+
+class function TCharSplit.getSpltValueOfKey(const S: string; const compareKey: string;
+  const c: Char): string;
+var strs: TStrings;
+  I: integer;
+begin
+  Result := '';
+  strs := TStringList.Create;
+  try
+    strs.Delimiter := c;
+    strs.DelimitedText := S;
+    strs.StrictDelimiter := true;
+    if strs.Count>0 then begin
+      for I := 0 to strs.Count - 1 do begin
+        if SameText(strs[I], compareKey) then begin
+          if I<>strs.Count - 1 then begin
+            Result := strs[I + 1];
+          end;
+          break;
+        end;
+      end;
+    end;
+  finally
+    if Assigned(strs) then strs.Free;
+  end;
+end;
+
+class procedure TCharSplit.SplitStr(const S, ch: String; strs: TStrings;
+  const inclu: boolean);
 var
-  Temp: String;
+  Temp, str: String;
   I: Integer;
-  chLength: Integer;
+  cLen: Integer;
 begin
   if S = '' then Exit;
 
   Temp := S;
   I := Pos(ch, S);
-  chLength := Length(ch);
+  cLen := Length(ch);
   while I<>0 do begin
-    strs.Add( Copy(Temp, 0, I - chLength + 1 ));
-    Delete(Temp, 1, I - 1 + chLength);
-    I:=pos(ch, Temp);
+    if inclu then begin
+      str := Copy(Temp, 0, I );
+    end else begin
+      str := Copy(Temp, 0, I - cLen );
+    end;
+    strs.Add( str );
+    Delete(Temp, 1, I - 1 + cLen);
+    I := pos(ch, Temp);
   end;
   strs.add(Temp);
 end;
+{var
+  Temp, str: String;
+  I: Integer;
+  cLen: Integer;
+begin
+  if S = '' then Exit;
+
+  Temp := S;
+  I := Pos(ch, S);
+  cLen := Length(ch);
+  while I<>0 do begin
+    if inclu then begin
+      str := Copy(Temp, 0, I - cLen + 1 );
+    end else begin
+      str := Copy(Temp, 0, I + cLen + 1 );
+    end;
+    strs.Add( str );
+    Delete(Temp, 1, I - 1 + cLen);
+    I := pos(ch, Temp);
+  end;
+  strs.add(Temp);
+end;}
 
 class function TCharSplit.getSplitFirst(const S, c: String): string;
 begin
@@ -369,7 +510,7 @@ var
 begin
   Result := '';
   for I := 0 to strs.Count-1 do begin
-    S := strs[i];
+    S := strs[I];
     if (Result='') then begin
       Result := S;
     end else begin

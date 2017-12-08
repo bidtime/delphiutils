@@ -4,6 +4,7 @@ uses
   Vcl.Forms,
   uStrUtils in 'src\utils\uStrUtils.pas',
   uCharSplit in 'src\utils\uCharSplit.pas',
+  uCharUtils in 'src\utils\uCharUtils.pas',
   uCommEvents in 'src\utils\uCommEvents.pas',
   uMyTextFile in 'src\utils\uMyTextFile.pas',
   uNetHttpClt in 'src\utils\uNetHttpClt.pas',
