@@ -17,7 +17,7 @@ type
   TElementCodeEvent = procedure(Sender: IHtmlElement;
     const code, codeDtl: string) of object;
 
-  TPaserUtils = class
+  TParserUtils = class
   public
     class function correctPath(const S: string): string; static;
     class function datetimeToLong(const dt: TDateTime): int64; static;
@@ -72,7 +72,7 @@ implementation
 
 uses StrUtils, System.json, uCharSplit, Forms;
 
-class function TPaserUtils.getCssIdx(const node: IHtmlElement;
+class function TParserUtils.getCssIdx(const node: IHtmlElement;
   const cssSel: string; const idx: integer): string;
 var
   l: IHtmlElementList;
@@ -88,7 +88,7 @@ begin
   end;
 end;
 
-class function TPaserUtils.getEleCSSIdx(const node: IHtmlElement;
+class function TParserUtils.getEleCSSIdx(const node: IHtmlElement;
   const cssSel: string; const idx: integer): IHtmlElement;
 var
   l: IHtmlElementList;
@@ -104,19 +104,19 @@ begin
   end;
 end;
 
-class function TPaserUtils.getEleCSSIdxLast(const node: IHtmlElement;
+class function TParserUtils.getEleCSSIdxLast(const node: IHtmlElement;
   const cssSel: string): IHtmlElement;
 begin
   Result := getEleCSSIdx(node, cssSel, -1);
 end;
 
-class function TPaserUtils.getCssLast(const node: IHtmlElement;
+class function TParserUtils.getCssLast(const node: IHtmlElement;
   const cssSel: string): string;
 begin
   Result := getCssRevIdx(node, cssSel, 0);
 end;
 
-class function TPaserUtils.getCssRevIdx(const node: IHtmlElement;
+class function TParserUtils.getCssRevIdx(const node: IHtmlElement;
   const cssSel: string; const n: integer): string;
 var
   l: IHtmlElementList;
@@ -134,7 +134,7 @@ begin
   end;
 end;
 
-class procedure TPaserUtils.getCssOfTag(const node: IHtmlElement; const cssSel: string;
+class procedure TParserUtils.getCssOfTag(const node: IHtmlElement; const cssSel: string;
   strs: TStrings; const clear: boolean);
 var
   l: IHtmlElementList;
@@ -154,26 +154,26 @@ begin
   end;
 end;
 
-class function TPaserUtils.getCssFirst(const node: IHtmlElement; const cssSel: string): string;
+class function TParserUtils.getCssFirst(const node: IHtmlElement; const cssSel: string): string;
 begin
   Result := getCssIdx(node, cssSel, 0);
 end;
 
-class function TPaserUtils.datetimeToLong(const dt: TDateTime): int64;
+class function TParserUtils.datetimeToLong(const dt: TDateTime): int64;
 const
   cUnixStartDate: TDateTime = 25569.0; // 1970/01/01
 begin
   Result := Round((dt - cUnixStartDate) * 86400);
 end;
 
-class function TPaserUtils.nowToLong(): int64;
+class function TParserUtils.nowToLong(): int64;
 begin
   Result := datetimeToLong(now());
 end;
 
 //  ExtractFileOnly('D:\TDDownload\cartype\code-\D001001.html');
 
-class function TPaserUtils.ExtractFileOnly(const fName: string): string;
+class function TParserUtils.ExtractFileOnly(const fName: string): string;
 var
   I, J: Integer;
 begin
@@ -182,7 +182,7 @@ begin
   Result := fName.SubString(J+1, I-j-1);
 end;
 
-class procedure TPaserUtils.SimpleCSSSel(const node: IHtmlElement; const cssSel: string;
+class procedure TParserUtils.SimpleCSSSel(const node: IHtmlElement; const cssSel: string;
   const doIt: TElementEvent);
 var
   hl: IHtmlElementList;
@@ -205,7 +205,7 @@ begin
   end;
 end;
 
-class procedure TPaserUtils.SimpleCSSSel(const S, cssSel: string;
+class procedure TParserUtils.SimpleCSSSel(const S, cssSel: string;
   const doIt: TElementEvent);
 var node: IHtmlElement;
 begin
@@ -213,7 +213,7 @@ begin
   SimpleCSSSel(node, cssSel, doIt);
 end;
 
-class procedure TPaserUtils.SimpleCSSSelAttr(const S, cssSel: string;
+class procedure TParserUtils.SimpleCSSSelAttr(const S, cssSel: string;
   strs: TStrings; const attr: string; const doStrsEv: TElementStrsEvent;
     const addStrs: boolean);
 var node: IHtmlElement;
@@ -222,7 +222,7 @@ begin
   SimpleCSSSelAttr(node, cssSel, strs, attr, doStrsEv, addStrs);
 end;
 
-class procedure TPaserUtils.SimpleCSSSelAttr(const node: IHtmlElement;
+class procedure TParserUtils.SimpleCSSSelAttr(const node: IHtmlElement;
   const cssSel: string; strs: TStrings; const attr: string;
     const doStrsEv: TElementStrsEvent; const addStrs: boolean);
 var
@@ -249,7 +249,7 @@ begin
   end;
 end;
 
-class procedure TPaserUtils.SimpleCSSSelAttr(const S, cssSel: string;
+class procedure TParserUtils.SimpleCSSSelAttr(const S, cssSel: string;
   strs: TStrings; const attr: string);
 var node: IHtmlElement;
 begin
@@ -257,7 +257,7 @@ begin
   SimpleCSSSelAttr(node, cssSel, strs, attr);
 end;
 
-class procedure TPaserUtils.SimpleCSSSelAttr(const node: IHtmlElement;
+class procedure TParserUtils.SimpleCSSSelAttr(const node: IHtmlElement;
   const cssSel: string; strs: TStrings; const attr: string);
 var
   hl: IHtmlElementList;
@@ -280,7 +280,7 @@ begin
   end;
 end;
 
-class procedure TPaserUtils.SimpleCSSSel2(const node: IHtmlElement; const cssSel, code,
+class procedure TParserUtils.SimpleCSSSel2(const node: IHtmlElement; const cssSel, code,
   dtlCode: string; const doIt: TElementCodeEvent);
 var
   hl: IHtmlElementList;
@@ -303,7 +303,7 @@ begin
   end;
 end;
 
-class procedure TPaserUtils.forceDirs(const fName: string);
+class procedure TParserUtils.forceDirs(const fName: string);
 var path: string;
 begin
   path := ExtractFilePath(fName);
@@ -312,14 +312,14 @@ begin
   end;
 end;
 
-class function TPaserUtils.correctPath(const S: string): string;
+class function TParserUtils.correctPath(const S: string): string;
 begin
   Result := S;
   Result := StringReplace(Result, #13, '', [rfReplaceAll]);
   Result := StringReplace(Result, #10, '', [rfReplaceAll]);
 end;
 
-class function TPaserUtils.eleToStrRaw(e: IHtmlElement; const ori: boolean): string;
+class function TParserUtils.eleToStrRaw(e: IHtmlElement; const ori: boolean): string;
 begin
   if ori then begin
     Result := e.Orignal + #9 + e.InnerText;
@@ -330,7 +330,7 @@ begin
   end;
 end;
 
-class function TPaserUtils.eleToStr(e: IHtmlElement): string;
+class function TParserUtils.eleToStr(e: IHtmlElement): string;
 begin
   eleToStrRaw(e, false);
 end;
