@@ -2,7 +2,7 @@ unit uNetUtils;
 
 interface
 
-uses classes, Windows, SysUtils;
+uses classes, SysUtils;
 
 type
   TNetUtils = class

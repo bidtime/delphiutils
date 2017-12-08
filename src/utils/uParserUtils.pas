@@ -1,13 +1,10 @@
-unit uPaserUtils;
+unit uParserUtils;
 
 interface
 
 uses classes, SysUtils, HtmlParser_XE3UP;
 
 type
-
-  TGetStrProc2 = procedure(const S, S2: string) of object;
-  TBoolOfStrProc = function(const S: string):boolean of object;
   TGetStrProc4 = procedure(const S, S2, S3: string; const strs: TStrings;
      const S4: string) of object;
   TElementEvent = procedure(Sender: IHtmlElement) of object;

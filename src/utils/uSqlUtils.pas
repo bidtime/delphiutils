@@ -2,7 +2,7 @@ unit uSqlUtils;
 
 interface
 
-uses classes, Windows, SysUtils, Generics.Collections, Generics.Defaults;
+uses classes;
 
 type
 
@@ -25,7 +25,7 @@ type
 
 implementation
 
-uses StrUtils, uCharSplit;//, System.json, Forms;
+uses StrUtils, uCharSplit, SysUtils, Generics.Collections, Generics.Defaults;
 
 class procedure TSqlUtils.getInsertSqlOfStrs(const strs: TStrings; const tName: string;
     strsRst: TStrings; const blEvent:TBoolOfStrProc);
@@ -73,7 +73,7 @@ begin
       if (I=0) then begin
         TCharSplit.SplitChar(S, #9, strsCol);
         if (strscol.Count <=0 ) then begin
-          strsRst.Add('error: 列数不能少于0列,请检查.');
+          strsRst.Add('error: column not found.');
           break;
         end;
         sqlCols := TCharSplit.replaceSplitChar(S, #9, #44);
@@ -177,19 +177,18 @@ var i: integer;
   s, sql: string;
   strsCol: TStrings;
   dicWhere, dicShowCol, dicHideCol: TDictionary<String, Boolean>;
-  EquComparer: IEqualityComparer<string>; {相等对比器}
+  EquComparer: IEqualityComparer<string>;
 begin
   strsRst.Clear;
   strsRst.Add('start transaction;');
   if strs.Count <= 0 then exit;
 
-  {通过 IEqualityComparer 让 TDictionary 的 Key 忽略大小写}
   EquComparer := TEqualityComparer<string>.Construct(
      function(const Left, Right: string): Boolean begin
        Result := LowerCase(Left) = LowerCase(Right);
      end,
      function(const Value: string): Integer begin
-       Result := StrToIntDef(Value, 0); {我暂时不知道这个函数的作用, 随便写的}
+       Result := StrToIntDef(Value, 0);
      end
   );
 
@@ -205,7 +204,7 @@ begin
       if (I=0) then begin
         TCharSplit.SplitChar(S, #9, strsCol);
         if (strscol.Count <=1 ) then begin
-          strsRst.Add('error: 列数不能少于2列,请检查.');
+          strsRst.Add('error: column not found.');
           break;
         end;
         //
@@ -215,7 +214,7 @@ begin
           loadDicOfStr(whereCols, dicWhere);
         end;
         if (dicWhere.Count<=0) then begin
-          strsRst.Add('error: where条件没有字段,请检查.');
+          strsRst.Add('error: where not find.');
           break;
         end;
       end else begin

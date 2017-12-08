@@ -2,7 +2,7 @@ unit uFileUtils;
 
 interface
 
-uses classes, Windows, SysUtils, System.Net.HttpClientComponent;
+uses SysUtils;
 
 type
   TFileUtils = class
@@ -20,7 +20,7 @@ type
 
 implementation
 
-uses StrUtils, Forms;
+uses Classes;
 
 class function TFileUtils.getAppSubFile(const dir, S: string): string;
 begin
@@ -80,7 +80,7 @@ end;
 
 class function TFileUtils.getAppPath(): string;
 begin
-  Result := ExtractFilePath(Application.exeName);
+  Result := ExtractFilePath(ParamStr(0));
 end;
 
 end.

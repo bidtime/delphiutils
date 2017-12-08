@@ -2,7 +2,7 @@ unit uNetHttpClt;
 
 interface
 
-uses classes, Windows, SysUtils, System.Net.HttpClientComponent;
+uses classes, SysUtils, System.Net.HttpClientComponent;
 
 type
   TNetHttpClt = class

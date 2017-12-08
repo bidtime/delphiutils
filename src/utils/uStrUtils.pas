@@ -2,8 +2,6 @@ unit uStrUtils;
 
 interface
 
-uses SysUtils, classes;
-
 function rmSubStr(const S: string; const sub: string): string;
   function getRightChar(const S: string; const c: char; const incl: boolean=false): string;
   function getLeftChar(const S: string; const c: char; const incl: boolean=false): string;
@@ -17,9 +15,9 @@ function rmSubStr(const S: string; const sub: string): string;
   function getRightRightStr(const S: string; const c: string; var str: string;
     const incl: boolean=false): boolean;
 
-
 implementation
 
+uses SysUtils;
 
 function rmSubStr(const S: string; const sub: string): string;
 var
